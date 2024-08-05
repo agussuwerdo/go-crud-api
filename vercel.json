@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "handler/handler.go",
+      "use": "@vercel/go"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "handler/handler.go"
+    }
+  ],
+  "projectSettings": {
+    "framework": "go",
+    "buildCommand": "go build -o main handler/handler.go",
+    "outputDirectory": ".",
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
+}

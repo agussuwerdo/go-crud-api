@@ -1,0 +1,41 @@
+# Go binary files
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go build files
+*.a
+*.o
+*.s
+*.prof
+
+# Go modules
+# Dependency directories (Go modules and vendor directory)
+vendor/
+go.sum
+go.mod
+
+# IDE/editor specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Environment variables
+.env
+
+# Swagger generated files
+docs/swagger.json
+docs/swagger.yaml
+.vercel
