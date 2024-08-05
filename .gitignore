@@ -39,3 +39,6 @@ Thumbs.db
 docs/swagger.json
 docs/swagger.yaml
 .vercel
+
+# frontend
+node_modules/

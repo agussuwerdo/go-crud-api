@@ -13,6 +13,7 @@ import (
 
 	_ "goroutine/docs" // Import your docs
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	files "github.com/swaggo/files" // Swagger embed files
@@ -116,6 +117,16 @@ func InitMongoDB() {
 func SetupRouter() *gin.Engine {
 	// Set up Gin
 	r := gin.Default()
+
+	// CORS configuration
+	r.Use(cors.New(cors.Config{
+		// AllowOrigins:     []string{"http://localhost:3000"}, // Allow specific origin
+		AllowOrigins:     []string{"*"}, // Allow all origins
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	// Swagger UI
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
