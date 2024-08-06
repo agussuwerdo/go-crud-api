@@ -1,3 +1,4 @@
+// handler/handler.go
 package handler
 
 import (
@@ -11,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	_ "goroutine/docs" // Import your docs
+	_ "goroutine/docs"
 
 	"goroutine/middleware"
 
