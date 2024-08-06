@@ -13,6 +13,8 @@ import (
 
 	_ "goroutine/docs" // Import your docs
 
+	"goroutine/middleware"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -123,7 +125,7 @@ func SetupRouter() *gin.Engine {
 		// AllowOrigins:     []string{"http://localhost:3000"}, // Allow specific origin
 		AllowOrigins:     []string{"*"}, // Allow all origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
@@ -136,12 +138,32 @@ func SetupRouter() *gin.Engine {
 			"message": "pong",
 		})
 	})
+	// Public route
+	r.POST("/login", func(c *gin.Context) {
+		var loginData struct {
+			Username string `json:"username"`
+			Password string `json:"password"`
+		}
+		if err := c.BindJSON(&loginData); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid input"})
+			return
+		}
 
+		// Authenticate user (e.g., check username and password)
+		// For demo purposes, assume authentication is successful
+		token, err := middleware.GenerateToken(loginData.Username)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Error generating token"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"token": token})
+	})
 	// Example route to get data from MongoDB
-	r.GET("/items", GetItems)
-	r.POST("/items", CreateItem)
-	r.PUT("/items/:id", UpdateItem)    // Update route to use ID
-	r.DELETE("/items/:id", DeleteItem) // Add this line
+	r.GET("/items", middleware.AuthMiddleware(), GetItems)
+	r.POST("/items", middleware.AuthMiddleware(), CreateItem)
+	r.PUT("/items/:id", middleware.AuthMiddleware(), UpdateItem)    // Update route to use ID
+	r.DELETE("/items/:id", middleware.AuthMiddleware(), DeleteItem) // Add this line
 
 	return r
 }
