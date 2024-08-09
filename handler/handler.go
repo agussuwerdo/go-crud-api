@@ -115,6 +115,13 @@ func InitMongoDB() {
 	}
 
 	fmt.Println("Connected to MongoDB!")
+
+	// Defer disconnecting from MongoDB
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			log.Fatalf("Error disconnecting from MongoDB: %v\n", err)
+		}
+	}()
 }
 
 func SetupRouter() *gin.Engine {
